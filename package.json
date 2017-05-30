@@ -1,0 +1,19 @@
+{
+  "name": "kap-draggable",
+  "version": "0.1.0",
+  "repository": "albinekb/kap-draggable",
+  "author": {
+    "name": "Albin Ekblom",
+    "url": "https://github.com/albinekb"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {},
+  "description": "Share recordings with drag and drop",
+  "keywords": ["kap-plugin", "drag-and-drop"],
+  "files": [
+    "index.js",
+    "index.html",
+    "gif.png"
+  ]
+}
