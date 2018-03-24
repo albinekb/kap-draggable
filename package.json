@@ -10,10 +10,17 @@
   "license": "MIT",
   "dependencies": {},
   "description": "Share recordings with drag and drop",
-  "keywords": ["kap-plugin", "drag-and-drop"],
+  "keywords": [
+    "kap-plugin",
+    "drag-and-drop"
+  ],
   "files": [
     "index.js",
     "index.html",
     "gif.png"
-  ]
+  ],
+  "devDependencies": {
+    "electron": "^1.8.4",
+    "kap-plugin-mock-context": "^0.2.0"
+  }
 }
