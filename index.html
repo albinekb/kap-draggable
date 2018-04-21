@@ -12,7 +12,7 @@
   }
 
   body {
-    background: black;
+    background: white;
     overflow: hidden;
     -webkit-app-region: drag;
   }
@@ -44,32 +44,44 @@
   }
 
   img {
-    height: 100%;
-    max-height: 300px;
+    /* height: 100%;
+    max-height: 300px; */
+  }
+
+  #file-icon {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
   }
 </style>
 <div id='drag' draggable='true'>
-
-  <video src='' autoplay />
+  <svg id='file-icon' style="width:64px;height:64px" viewBox="0 0 24 24">
+    <path fill="#FFFFFF" d="M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M6,20H15L18,20V12L14,16L12,14L6,20M8,9A2,2 0 0,0 6,11A2,2 0 0,0 8,13A2,2 0 0,0 10,11A2,2 0 0,0 8,9Z"
+    />
+  </svg>
 </div>
 <script>
   const { ipcRenderer } = require('electron')
-  const [, url] = location.hash.split('#')
-  if (url.endsWith('.mp4')) {
-    document.querySelector('video').src = url
-  }
-  if (url.endsWith('.gif') || url.endsWith('.apng')) {
+  const url = location.hash.replace('#', '')
+  alert(url)
+  if (url.endsWith('.mp4') || url.endsWith('.webm')) {
+    const video = document.createElement("video")
+    video.autoplay = true
+    video.src = `${decodeURIComponent(url)}`
+    document.querySelector('#drag').appendChild(video)
+  } else if (url.endsWith('.gif') || url.endsWith('.apng')) {
     const img = document.createElement("img")
     img.onload = () => {
-      // alert('loaded' + img.width + ' ' + img.height)
       ipcRenderer.send('size', { width: img.width, height: img.height })
     }
-    img.src = `file://${decodeURIComponent(url)}`
+    img.src = `${decodeURIComponent(url)}`
     document.querySelector('#drag').appendChild(img)
   }
 
   window.document.getElementById('drag').ondragstart = (event) => {
     event.preventDefault()
-    ipcRenderer.send('ondragstart')
+    ipcRenderer.send('ondragstart', { metaKey: event.metaKey })
   }
 </script>

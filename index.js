@@ -19,24 +19,33 @@ const draggableFile = async (file, { title }) => {
     title,
     resizable: true,
     backgroundColor: 'black',
+    show: false,
   })
 
   win.setAlwaysOnTop(true, 'screen-saver')
   win.loadURL(`file://${__dirname}/index.html#${encodeURIComponent(file)}`)
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 
   win.on('closed', () => {
     win = null
   })
 
   ipc.once('size', (event, { width, height }) => {
-    win.setSize(width, height, true)
+    const padding = 15
+    win.setSize(width, height + padding, true)
   })
-  ipc.once('ondragstart', event => {
-    event.sender.startDrag({
-      file,
-      icon: pathJoin(__dirname, 'file.png'),
+
+  ipc.on('ondragstart', event => {
+    win.capturePage(icon => {
+      win.close()
+      event.sender.startDrag({
+        file,
+        icon,
+      })
     })
-    win.close()
   })
 }
 
@@ -48,7 +57,7 @@ const action = async context => {
 
 const draggable = {
   title: 'Drag and Drop',
-  formats: ['gif', 'mp4', 'apng'],
+  formats: ['gif', 'mp4', 'webm', 'apng'],
   action,
 }
 exports.action = action
