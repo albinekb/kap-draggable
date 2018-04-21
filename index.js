@@ -29,16 +29,16 @@ const draggableFile = async (file, { title }) => {
     win.show()
   })
 
-  win.on('closed', () => {
+  win.once('closed', () => {
     win = null
   })
 
   ipc.once('size', (event, { width, height }) => {
     const padding = 15
-    win.setSize(width, height + padding, true)
+    if (win) win.setSize(width, height + padding, true)
   })
 
-  ipc.on('ondragstart', event => {
+  ipc.once('ondragstart', event => {
     win.capturePage(icon => {
       win.close()
       event.sender.startDrag({
