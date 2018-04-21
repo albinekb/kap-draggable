@@ -2,7 +2,7 @@ const electron = require('electron')
 const { BrowserWindow, ipcMain: ipc } = electron
 const { join: pathJoin } = require('path')
 
-const draggableFile = async (gifPath, { title }) => {
+const draggableFile = async (file, { title }) => {
   const { bounds } = electron.screen.getPrimaryDisplay()
   const height = 200
   const width = 300
@@ -22,16 +22,19 @@ const draggableFile = async (gifPath, { title }) => {
   })
 
   win.setAlwaysOnTop(true, 'screen-saver')
-  win.loadURL(`file://${__dirname}/index.html#${gifPath}`)
+  win.loadURL(`file://${__dirname}/index.html#${encodeURIComponent(file)}`)
 
   win.on('closed', () => {
     win = null
   })
 
+  ipc.once('size', (event, { width, height }) => {
+    win.setSize(width, height, true)
+  })
   ipc.once('ondragstart', event => {
     event.sender.startDrag({
-      file: gifPath,
-      icon: pathJoin(__dirname, 'gif.png'),
+      file,
+      icon: pathJoin(__dirname, 'file.png'),
     })
     win.close()
   })
@@ -45,7 +48,7 @@ const action = async context => {
 
 const draggable = {
   title: 'Drag and Drop',
-  formats: ['gif', 'mp4'],
+  formats: ['gif', 'mp4', 'apng'],
   action,
 }
 exports.action = action

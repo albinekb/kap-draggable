@@ -17,10 +17,13 @@
   "files": [
     "index.js",
     "index.html",
-    "gif.png"
+    "file.png"
   ],
   "devDependencies": {
     "electron": "^1.8.4",
     "kap-plugin-mock-context": "^0.2.0"
+  },
+  "scripts": {
+    "test": "electron test.js"
   }
 }

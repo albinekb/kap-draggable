@@ -35,20 +35,37 @@
 
   video {
     width: 100%;
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
+
+  img {
+    height: 100%;
+    max-height: 300px;
   }
 </style>
 <div id='drag' draggable='true'>
-  <img src='' />
+
   <video src='' autoplay />
 </div>
 <script>
   const { ipcRenderer } = require('electron')
-  const url = location.hash.replace('#', '')
+  const [, url] = location.hash.split('#')
   if (url.endsWith('.mp4')) {
     document.querySelector('video').src = url
   }
-  if (url.endsWith('.gif')) {
-    document.querySelector('#drag').style = `background-image: url(${url});`
+  if (url.endsWith('.gif') || url.endsWith('.apng')) {
+    const img = document.createElement("img")
+    img.onload = () => {
+      // alert('loaded' + img.width + ' ' + img.height)
+      ipcRenderer.send('size', { width: img.width, height: img.height })
+    }
+    img.src = `file://${decodeURIComponent(url)}`
+    document.querySelector('#drag').appendChild(img)
   }
 
   window.document.getElementById('drag').ondragstart = (event) => {
