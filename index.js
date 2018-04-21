@@ -29,10 +29,6 @@ const draggableFile = async (file, { title }) => {
     win.show()
   })
 
-  win.once('closed', () => {
-    win = null
-  })
-
   ipc.once('size', (event, { width, height }) => {
     const padding = 15
     if (win) win.setSize(width, height + padding, true)
@@ -46,6 +42,12 @@ const draggableFile = async (file, { title }) => {
         icon,
       })
     })
+  })
+
+  win.once('closed', () => {
+    ipc.removeAllListeners('ondragstart')
+    ipc.removeAllListeners('size')
+    win = null
   })
 }
 
