@@ -65,7 +65,7 @@
 <script>
   const { ipcRenderer } = require('electron')
   const url = location.hash.replace('#', '')
-  alert(url)
+
   if (url.endsWith('.mp4') || url.endsWith('.webm')) {
     const video = document.createElement("video")
     video.autoplay = true
