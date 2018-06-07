@@ -69,14 +69,14 @@
   if (url.endsWith('.mp4') || url.endsWith('.webm')) {
     const video = document.createElement("video")
     video.autoplay = true
-    video.src = `${decodeURIComponent(url)}`
+    video.src = `file://${decodeURIComponent(url)}`
     document.querySelector('#drag').appendChild(video)
   } else if (url.endsWith('.gif') || url.endsWith('.apng')) {
     const img = document.createElement("img")
     img.onload = () => {
       ipcRenderer.send('size', { width: img.width, height: img.height })
     }
-    img.src = `${decodeURIComponent(url)}`
+    img.src = `file://${decodeURIComponent(url)}`
     document.querySelector('#drag').appendChild(img)
   }
 
