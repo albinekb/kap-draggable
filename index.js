@@ -13,7 +13,9 @@ const draggableFile = async (file, { title }) => {
     y: bounds.width.height / 2 - height / 2,
     alwaysOnTop: true,
     acceptFirstMouse: true,
-    // frame: false,
+    webPreferences: {
+      webSecurity: false,
+    },
     enableLargerThanScreen: true,
     movable: true,
     title,
